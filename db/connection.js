@@ -7,16 +7,8 @@ const db = mysql.createConnection({
     user: 'root',
     // Your MySQL password 
     password: '',
-    database: 'election'
+    database: 'employeeTrackerDb'
   });
 
-  db.connect(err => {
-    if (err) throw err;
-    console.log("For the thousands in attendence and the millions watching around the world...Let's get ready to track the employees!");
-    
-  });
   
-
-
-
   module.exports = db;
