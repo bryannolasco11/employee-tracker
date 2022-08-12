@@ -6,3 +6,6 @@
 //         update employee role
 
 // 3) make functions for all the functions
+// dependencies
+const inquirer = require('inquirer');
+const db = require('./db/connection');
