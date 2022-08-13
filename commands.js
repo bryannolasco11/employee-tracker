@@ -1,6 +1,7 @@
 const cTable = require('console.table');
 const connection = require('./db/connection');
 const mysql = require('mysql2');
+const promptUser = require('./index');
 
 // From MYSQL2 docs: MySQL provides execute helper which will prepare and query the statement. 
 const viewDept = ()=> {
@@ -16,7 +17,7 @@ const viewDept = ()=> {
     );
 };
 
-function viewRoles() {
+const viewRoles = () => {
     console.log('This is viewRoles');
     connection.execute(
         `SELECT * FROM roles`,
@@ -33,8 +34,23 @@ function viewEmployees() {
     console.log('This is viewEmployees');
 };
 
-function addDept() {
-    console.log('This is addDept');
+const addDept = () => {
+    inquirer.prompt([
+        {
+           type: 'input',
+           name: 'addDept',
+           message: 'What is the name of the department that you wish to add?',
+           validate: descriptionInput => {
+            if (descriptionInput) {
+              return true;
+            } else {
+                console.log('Please enter a department name.');
+                return false;
+              }
+            }
+          } 
+    ])
+    .then(answer => )
 };
 
 function addRole() {
@@ -52,4 +68,5 @@ function updateRole() {
 module.exports = { 
     viewDept,
     viewRoles,
+    addDept
 }
