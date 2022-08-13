@@ -8,33 +8,24 @@
 // 3) make functions for all the functions
 // dependencies
 const inquirer = require('inquirer');
-//const db = require('./db/connection');
+const db = require('./db/connection');
+const { viewDept, viewRoles } = require('./commands');
 
-// const PORT = process.env.PORT || 3001;
-
-// db.connect(err => {
-//     if (err) throw err;
-//     console.log("For the thousands in attendence and the millions watching around the world...Let's get ready to track the employees!");
-//     app.listen(PORT, () => {
-//         console.log(`Server running on port ${PORT}`);
-//       });
-//     promptUser();
-//   });
-  
 promptUser = () => {
     inquirer.prompt([
         {
             type: 'list',
             name: 'selection',
             message: 'Please choose from the following options:',
-            choices: ['View all departments, View all roles, View all employees, Add a department, Add a role, Add an employee, Update an employee role']
+            choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role']
         }
     ])
     .then((answer)=>{
         console.log(answer.selection);
-        switch(answers.selection) {
+        switch(answer.selection) {
             case 'View all departments':
-                viewDept();
+            console.log('View All Departments');    
+            viewDept();
                 break;
             case 'View all roles':
                 viewRoles();
@@ -56,32 +47,7 @@ promptUser = () => {
                 break;  
         }
     })
+    .then(promptUser);
 };
 
-function viewDept() {
-    console.log('This is viewDept');
-};
-
-function viewRoles() {
-    console.log('This is viewRoles');
-};
-
-function viewEmployees() {
-    console.log('This is viewEmployees');
-};
-
-function addDept() {
-    console.log('This is addDept');
-};
-
-function addRole() {
-    console.log('This is addRole');
-};
-
-function addEmployee() {
-    console.log('This is addEmployee');
-};
-
-function updateRole() {
-    console.log('This is updateRole');
-};
+promptUser()
