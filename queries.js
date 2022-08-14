@@ -40,13 +40,13 @@ function viewEmployees() {
 };
 
 const addDept = () => {
-    return inquirer.prompt([
+    inquirer.prompt([
         {
            type: 'input',
            name: 'addDept',
            message: 'What is the name of the department that you wish to add?',
-           validate: descriptionInput => {
-            if (descriptionInput) {
+           validate: inputDept => {
+            if (inputDept) {
               return true;
             } else {
                 console.log('Please enter a department name.');
@@ -66,8 +66,50 @@ const addDept = () => {
     })
 };
 
-function addRole() {
-    console.log('This is addRole');
+// When choose to add a role
+// 1) prompt enter name, salary, and dept for the role
+// 2) that role is added to the database
+    // INSERT INTO prices (id, price) VALUES (1, 10.55);
+// However the department is already there. 
+//So, do we have to push the dept names into an array, 
+// then filter those out to display in a list for the inquiry?
+
+const addRole = () => {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'role',
+            message: 'What is the name of the role you wish to add?',
+            validate: inputDept => {
+                if (inputDept) {
+                  return true;
+                } else {
+                    console.log('Please enter a department name.');
+                    return false;
+                  }
+                } 
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: 'What is the salary for the role?',
+            validate: inputSalary => {
+                if(inputSalary) {
+                    return true;
+                } else {
+                    console.log('Please enter a salary.');
+                    return false;
+                }
+            }
+        }
+    ])
+    . then(answer => {
+        //use params to put rolename and salary in an array
+        const params = [answer.role, answer.salary];
+        console.log (answer.role);
+        console.log (answer.salary);
+        console.log(params);
+    })
 };
 
 function addEmployee() {
@@ -81,5 +123,6 @@ function updateRole() {
 module.exports = { 
     viewDept,
     viewRoles,
-    addDept
+    addDept,
+    addRole
 }

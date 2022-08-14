@@ -9,7 +9,7 @@
 // dependencies
 const inquirer = require('inquirer');
 const db = require('./db/connection');
-const { viewDept, viewRoles, addDept } = require('./commands');
+const { viewDept, viewRoles, addDept, addRole } = require('./queries');
 
 promptUser = () => {
     inquirer.prompt([
