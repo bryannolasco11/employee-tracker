@@ -106,9 +106,44 @@ const addRole = () => {
     . then(answer => {
         //use params to put rolename and salary in an array
         const params = [answer.role, answer.salary];
-        console.log (answer.role);
-        console.log (answer.salary);
-        console.log(params);
+        //console.log (answer.role);
+        //console.log (answer.salary);
+        //console.log(params);
+
+        // now I have to grab the department name from the table
+        const deptSql = `Select department.id, department.dept_name FROM department`;
+        connection.query(deptSql, (err, result) =>{
+            if (err) throw err;
+        // Each dept name and title as to go into the inquirer
+        // array.map(function(currentValue, index, arr), thisValue) from w3 schools
+        // const persons = [
+        //     {firstname : "Malcom", lastname: "Reynolds"},
+        //     {firstname : "Kaylee", lastname: "Frye"},
+        //     {firstname : "Jayne", lastname: "Cobb"}
+        //   ];
+          
+        //   persons.map(getFullName);
+          
+        //   function getFullName(item) {
+        //     return [item.firstname,item.lastname].join(" ");
+        //   }
+        
+        //console.log(result); result is in an array
+        const deptNameArray = result;
+        console.log(deptNameArray);
+
+        // deptNameArray.map(deptNameIntoInquirer);
+
+        // function deptNameIntoInquirer(dept) {
+        //     return inquirer.prompt([
+        //         {
+        //             type: 'list',
+        //             name: 'dept',
+        //             choices: dept
+        //         }
+        //     ])
+        // }
+        })
     })
 };
 
