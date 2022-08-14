@@ -1,32 +1,37 @@
 const cTable = require('console.table');
 const connection = require('./db/connection');
 const mysql = require('mysql2');
-const promptUser = require('./index');
+const index = require('./index');
+const inquirer = require('inquirer');
 
 // From MYSQL2 docs: MySQL provides execute helper which will prepare and query the statement. 
 const viewDept = ()=> {
     //console.log('This is viewDept');
-    connection.execute(
-        `SELECT * FROM department`,
-        function(err,results) {
-            console.log(results);
+    const sql = `SELECT * FROM department`;
+    connection.query(sql, (err, results)=> {
+        if (err) throw err;
+            //console.log(results);
             // from console.table doc
             const table = cTable.getTable(results);
             console.log(table);
+            promptUser();
         }
-    );
+    );  
 };
 
+
+
 const viewRoles = () => {
-    console.log('This is viewRoles');
-    connection.execute(
-        `SELECT * FROM roles`,
-        function(err,results) {
-            console.log(results);
+    const sql = `SELECT * FROM department`;
+    connection.query(sql, (err, results)=> {
+        if (err) throw err;
+            //console.log(results);
+            // from console.table doc
             const table = cTable.getTable(results);
             console.log(table);
+            promptUser();  
         }
-    );
+    ); 
 };
 //I might need a constructor here.  I have to display a new table"
 function viewEmployees() {
@@ -35,7 +40,7 @@ function viewEmployees() {
 };
 
 const addDept = () => {
-    inquirer.prompt([
+    return inquirer.prompt([
         {
            type: 'input',
            name: 'addDept',
@@ -50,7 +55,15 @@ const addDept = () => {
             }
           } 
     ])
-    .then(answer => )
+    .then(answer => {
+        const sql = `INSERT INTO department(dept_name)
+                    VALUES (?)`;
+                    connection.query(sql, answer.addDept, (err, result) => {
+                        if (err) throw err;
+                        console.log(`You have added ${answer.addDept}!`);
+                        viewDept();
+                    })
+    })
 };
 
 function addRole() {

@@ -24,7 +24,7 @@ promptUser = () => {
         console.log(answer.selection);
         switch(answer.selection) {
             case 'View all departments':
-            console.log('View All Departments');    
+            //console.log('View All Departments');    
             viewDept();
                 break;
             case 'View all roles':
@@ -47,9 +47,9 @@ promptUser = () => {
                 break;  
         }
     })
-    .then(promptUser);
+    //.then(promptUser);
 };
 
 promptUser()
 
-module.exports = { promptUser }
+module.exports.promptUser = promptUser;
