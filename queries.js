@@ -33,10 +33,32 @@ const viewRoles = () => {
         }
     ); 
 };
-//I might need a constructor here.  I have to display a new table"
-function viewEmployees() {
-    const sql = `SELECT e`
-    console.log('This is viewEmployees');
+// show employee id, first name, last name, job titles, departments, salaries, and manager
+// from department get department name
+// from roles get job title and salary
+// from employees get first name, last name, salaries
+// manager?
+
+const viewEmployees = () => {
+    // const sql = `SELECT employees.id,
+    //                     employees.first_name,
+    //                     employees.last_name
+    //                     FROM employees
+    //                     LEFT JOIN roles 
+    //                         ON employees.id =roles.id;
+                       
+    //                     `; // LEFT J
+    //                     // department.dept_name,
+    //                     // roles.salary,
+    // connection.query(sql, (err, results)=> {
+    //     if (err) throw err;
+    //         //console.log(results);
+    //         // from console.table doc
+    //         const table = cTable.getTable(results);
+    //         console.log(table);
+    //         promptUser();
+    //     }
+    // )
 };
 
 const addDept = () => {
@@ -165,5 +187,6 @@ module.exports = {
     viewDept,
     viewRoles,
     addDept,
-    addRole
+    addRole,
+    viewEmployees
 }
