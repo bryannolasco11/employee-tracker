@@ -3,6 +3,7 @@ const connection = require('./db/connection');
 const mysql = require('mysql2');
 const index = require('./index');
 const inquirer = require('inquirer');
+const Department = require('./lib/department.js');
 
 // From MYSQL2 docs: MySQL provides execute helper which will prepare and query the statement. 
 const viewDept = ()=> {
@@ -38,27 +39,29 @@ const viewRoles = () => {
 // from roles get job title and salary
 // from employees get first name, last name, salaries
 // manager?
+// https://www.w3schools.com/sql/func_mysql_concat.asp
 
 const viewEmployees = () => {
-    // const sql = `SELECT employees.id,
-    //                     employees.first_name,
-    //                     employees.last_name
-    //                     FROM employees
-    //                     LEFT JOIN roles 
-    //                         ON employees.id =roles.id;
-                       
-    //                     `; // LEFT J
-    //                     // department.dept_name,
-    //                     // roles.salary,
-    // connection.query(sql, (err, results)=> {
-    //     if (err) throw err;
-    //         //console.log(results);
-    //         // from console.table doc
-    //         const table = cTable.getTable(results);
-    //         console.log(table);
-    //         promptUser();
-    //     }
-    // )
+    const sql = `SELECT employees.id,
+                        employees.first_name,
+                        employees.last_name,
+                        roles.title,
+                        department.dept_name,
+                        roles.salary,
+                        CONCAT (first_name, ' ', last_name) AS manager
+                 FROM employees
+                        LEFT JOIN roles ON employees.role_id = roles.id
+                        LEFT JOIN department ON roles.department_id = department.id
+                        `; 
+    connection.query(sql, (err, results)=> {
+        if (err) throw err;
+            //console.log(results);
+            // from console.table doc
+            const table = cTable.getTable(results);
+            console.log(table);
+            promptUser();
+        }
+    )
 };
 
 const addDept = () => {
@@ -160,23 +163,57 @@ const addRole = () => {
         // console.log(map1);
         // expected output: Array [2, 8, 18, 32]
         //map((element, index) => { /* … */ })
-        //const deptsForInquiry = deptNameArray.map(({dept_name}) => ({department: dept_name}));
+        //const deptsForInquiry = deptNameArray.map(({dept_name, id}) => ({department: dept_name, id: id}));
+        
+        
         console.log(deptsForInquiry);
 
-        inquirer.prompt([
-            {
-                type: 'list',
-                name: 'department',
-                message: 'For which department does the role belong?',
-                choices: deptsForInquiry
-            }
-        ])
-        })
-    })
+    //     inquirer.prompt([
+    //         {
+    //             type: 'list',
+    //             name: 'department',
+    //             message: 'For which department does the role belong?',
+    //             choices:  //`${dept_name}`
+    //         }
+    //     ])
+         })
+     })
 };
+// enter first name, last name, role, and manager 
+const addEmployee = ()=> {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'firstName',
+            message: "What is the employee's first name?",
+            validate: inputFirstName => {
+                if (inputFirstName) {
+                    return true;
+                } else {
+                    console.log("Please enter a first name.");
+                    return false;
+                }
+            }
+        },
+        {
+            type: 'input',
+            name: 'lastName',
+            message: "What is the employee's last name?",
+            validate: inputLastName => {
+                if (inputLastName) {
+                    return true;
+                } else {
+                    console.log("Pleae enter a last name.");
+                    return false;
+                }
+            }
+        }
+    ])
+    .then(answer => {
+        const params = [answer.firstName, answer.lastName]
+    })
 
-function addEmployee() {
-    console.log('This is addEmployee');
+    // need to map the roles from roles table
 };
 
 function updateRole() {
@@ -188,5 +225,6 @@ module.exports = {
     viewRoles,
     addDept,
     addRole,
-    viewEmployees
+    viewEmployees, 
+    addEmployee
 }
