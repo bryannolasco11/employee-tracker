@@ -131,18 +131,24 @@ const addRole = () => {
         //console.log(result); result is in an array
         const deptNameArray = result;
         console.log(deptNameArray);
+        //const array1 = [1, 4, 9, 16];
 
-        // deptNameArray.map(deptNameIntoInquirer);
+        // pass a function to map
+        // const map1 = array1.map(x => x * 2);
+        // console.log(map1);
+        // expected output: Array [2, 8, 18, 32]
+        //map((element, index) => { /* … */ })
+        //const deptsForInquiry = deptNameArray.map(({dept_name}) => ({department: dept_name}));
+        console.log(deptsForInquiry);
 
-        // function deptNameIntoInquirer(dept) {
-        //     return inquirer.prompt([
-        //         {
-        //             type: 'list',
-        //             name: 'dept',
-        //             choices: dept
-        //         }
-        //     ])
-        // }
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'department',
+                message: 'For which department does the role belong?',
+                choices: deptsForInquiry
+            }
+        ])
         })
     })
 };
