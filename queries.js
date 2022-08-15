@@ -240,7 +240,9 @@ const addEmployee = () => {
     // need to map the roles from roles table
 };
 
-function updateRole() {
+function updateRole(
+    
+) {
     console.log('This is updateRole');
 };
 
