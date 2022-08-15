@@ -240,11 +240,18 @@ const addEmployee = () => {
     // need to map the roles from roles table
 };
 
-function updateRole(
+updateRole = () => {
+    const empSql = `SELECT * FROM employees`;
+    connection.query(empSql, (err, result) => {
+        if (err) throw err;
+        const deptNameArray = result;
+        console.log(deptNameArray);
+    // inquirer to ask which employee want
+    // display the roles
+    // update the role
+    })
+}
     
-) {
-    console.log('This is updateRole');
-};
 
 module.exports = {
     viewDept,
@@ -252,5 +259,6 @@ module.exports = {
     addDept,
     addRole,
     viewEmployees,
-    addEmployee
+    addEmployee,
+    updateRole
 }
