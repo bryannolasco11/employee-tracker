@@ -17,7 +17,7 @@ promptUser = () => {
             type: 'list',
             name: 'selection',
             message: 'Please choose from the following options:',
-            choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role']
+            choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role', 'None']
         }
     ])
     .then((answer)=>{
@@ -45,6 +45,9 @@ promptUser = () => {
             case 'Update an employee role':
                 updateRole();
                 break;  
+            case 'None':
+                console.log('Have a nice day!')
+                process.exit();
         }
     })
     //.then(promptUser);
