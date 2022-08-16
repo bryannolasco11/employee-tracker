@@ -171,7 +171,7 @@ const addRole = () => {
                 // console.log(map1);
                 // expected output: Array [2, 8, 18, 32]
                 //map((element, index) => { /* … */ })
-                
+
 
 
                 //console.log(deptsForInquiry);
@@ -236,7 +236,7 @@ const addEmployee = () => {
     ])
         // I am getting the roles for displaying 
         .then(answer => {
-            
+
             const roleSql = `SELECT roles.id AS value, roles.title AS name from roles`;
             connection.query(roleSql, (err, result) => {
                 if (err) throw err;
@@ -251,78 +251,108 @@ const addEmployee = () => {
                         choices: roleTitleArray
                     }
                 ])
-                .then((answer2) => {
-                    console.log(answer2);
-                    
-                    const manSql = `SELECT 
+                    .then((answer2) => {
+                        console.log(answer2);
+
+                        const manSql = `SELECT 
                                         employees.id as value,
                                         CONCAT (employees.first_name, ' ', employees.last_name) AS name 
                                     FROM employees 
                                     `;
-                    connection.query(manSql, (err, result) => {
-                        if (err) throw err;
-                        const managerArray = result;
-                        console.log(managerArray);
+                        connection.query(manSql, (err, result) => {
+                            if (err) throw err;
+                            const managerArray = result;
+                            console.log(managerArray);
 
-                        inquirer.prompt([
-                            {
-                                type: 'list',
-                                name: 'manager',
-                                message: `Who will be the manager of ${answer.lastName}?`,
-                                choices: managerArray
-                            }
-                        ])
-                        .then((answer3) => {
-                            console.log(answer3);
-                            const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
+                            inquirer.prompt([
+                                {
+                                    type: 'list',
+                                    name: 'manager',
+                                    message: `Who will be the manager of ${answer.lastName}?`,
+                                    choices: managerArray
+                                }
+                            ])
+                                .then((answer3) => {
+                                    console.log(answer3);
+                                    const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
                                             VALUES (?, ?, ?, ?)`;
-                            const params = [answer.firstName, answer.lastName, answer2.role, answer3.manager]
-                            console.log(params)
-                            connection.query(sql, params, (err,results) => {
-                                if (err) throw err;
-                                const table = cTable.getTable(results);
-                                console.log(table);
-                                viewEmployees();
-                            })
+                                    const params = [answer.firstName, answer.lastName, answer2.role, answer3.manager]
+                                    console.log(params)
+                                    connection.query(sql, params, (err, results) => {
+                                        if (err) throw err;
+                                        const table = cTable.getTable(results);
+                                        console.log(table);
+                                        viewEmployees();
+                                    })
+                                })
                         })
                     })
-                })
             })
         })
 
-    
+
 };
 
 updateRole = () => {
     const empSql = `SELECT 
                             employees.id AS value,
                             CONCAT (employees.first_name, ' ', employees.last_name) AS name
-                            FROM employees
-
-    `;
+                            FROM employees`;
     connection.query(empSql, (err, result) => {
         if (err) throw err;
         const employeeArray = result;
         console.log(employeeArray);
-    // inquirer to ask which employee want
-    // display the roles
-    // update the role
-    inquirer.prompt([
-        {
-            type: 'list',
-            name: 'department',
-            message: "Which employee's role do you wish to update?",
-            choices: employeeArray
-        }
-    ])
-    // We need to insert
-        .then((answer2) => {
-            console.log(answer2);
-            const empRoleSql = `UPDATE employees SET roles `
-    })
-}
-    )}
-    
+        // inquirer to ask which employee want
+        // display the roles
+        // update the role
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'employee',
+                message: "Which employee's role do you wish to update?",
+                choices: employeeArray
+            }
+        ])
+            // We need to insert
+            .then((answer) => {
+                console.log(answer);
+                // https://www.w3schools.com/mysql/mysql_update.asp
+                // the update MYSQL command would be UPDATE employee SET role_id WHERE id 
+                // so I need employees.role_id and employees.id
+                // I already have employees.id so I need employees role id
+                const empRoleSql = `SELECT roles.id AS value, roles.title AS name FROM roles`;
+                connection.query(empRoleSql, (err, result) => {
+                    if (err) throw err;
+                    const diffRoleArray = result;
+                    console.log(diffRoleArray);
+
+                    inquirer.prompt([
+                        {
+                            type: 'list',
+                            name: 'role',
+                            message: 'What is the role of the Employee?',
+                            choices: diffRoleArray
+                        }
+                    ])
+                        .then((answer2) => {
+                            console.log(answer2);
+
+                            const diffRoleSql = `UPDATE employees SET role_id = ? WHERE id =?`
+                            const params = [answer2.role, answer.employee]
+                            console.log(params);
+                            connection.query(diffRoleSql, params, (err, results) => {
+                                if (err) throw err;
+                                const table = cTable.getTable(results);
+                                viewEmployees();
+                            })
+                        })
+                })
+
+            })
+    }
+    )
+};
+
 
 module.exports = {
     viewDept,
