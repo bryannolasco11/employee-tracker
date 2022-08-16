@@ -187,7 +187,7 @@ const addRole = () => {
                     .then((answer2) => {
                         console.log(answer2);
                         const sql = `INSERT INTO roles (title, department_id, salary)
-                                values
+                                VALUES
                                     (?,?,?)`;
                         const params = [answer.role, answer2.department, answer.salary];
                         connection.query(sql, params, (err, results) => {
@@ -196,7 +196,7 @@ const addRole = () => {
                             // from console.table doc
                             const table = cTable.getTable(results);
                             console.log(table);
-                            promptUser();
+                            viewRoles();
                         }
                         )
                     })
@@ -253,8 +253,7 @@ const addEmployee = () => {
                 ])
                 .then((answer2) => {
                     console.log(answer2);
-                    const params = [answer.firstName, answer.lastName, answer2.role]
-                    console.log (params);
+                    
                     const manSql = `SELECT 
                                         employees.id as value,
                                         CONCAT (employees.first_name, ' ', employees.last_name) AS name 
@@ -273,6 +272,19 @@ const addEmployee = () => {
                                 choices: managerArray
                             }
                         ])
+                        .then((answer3) => {
+                            console.log(answer3);
+                            const sql = `INSERT INTO employees (first_name, last_name, role_id, manager_id)
+                                            VALUES (?, ?, ?, ?)`;
+                            const params = [answer.firstName, answer.lastName, answer2.role, answer3.manager]
+                            console.log(params)
+                            connection.query(sql, params, (err,results) => {
+                                if (err) throw err;
+                                const table = cTable.getTable(results);
+                                console.log(table);
+                                viewEmployees();
+                            })
+                        })
                     })
                 })
             })
