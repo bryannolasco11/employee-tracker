@@ -255,16 +255,24 @@ const addEmployee = () => {
                     console.log(answer2);
                     const params = [answer.firstName, answer.lastName, answer2.role]
                     console.log (params);
-                    const manSql = `SELECT CONCAT (employees.first_name, ' ', employees.last_name) AS employee 
-                                   
-                                    FROM employees
-                                    
-                                    
+                    const manSql = `SELECT 
+                                        employees.id as value,
+                                        CONCAT (employees.first_name, ' ', employees.last_name) AS name 
+                                    FROM employees 
                                     `;
                     connection.query(manSql, (err, result) => {
                         if (err) throw err;
                         const managerArray = result;
                         console.log(managerArray);
+
+                        inquirer.prompt([
+                            {
+                                type: 'list',
+                                name: 'manager',
+                                message: `Who will be the manager of ${answer.lastName}?`,
+                                choices: managerArray
+                            }
+                        ])
                     })
                 })
             })
