@@ -55,11 +55,11 @@ const viewEmployees = () => {
                         roles.title,
                         department.dept_name AS department,
                         roles.salary,
-                        CONCAT (manager.first_name, ' ', manager.last_name) AS manager
+                        CONCAT (manager.first_name, ' ', manager.last_name) AS manager 
                  FROM employees
                         LEFT JOIN roles ON employees.role_id = roles.id
                         LEFT JOIN department ON roles.department_id = department.id
-                        LEFT JOIN employees manager ON employees.manager_id = manager.id
+                        LEFT JOIN employees manager ON employees.manager_id = manager.id 
                         `;
     connection.query(sql, (err, results) => {
         if (err) throw err;
@@ -236,7 +236,7 @@ const addEmployee = () => {
     ])
         // I am getting the roles for displaying 
         .then(answer => {
-            const params = [answer.firstName, answer.lastName]
+            
             const roleSql = `SELECT roles.id AS value, roles.title AS name from roles`;
             connection.query(roleSql, (err, result) => {
                 if (err) throw err;
@@ -246,13 +246,26 @@ const addEmployee = () => {
                 inquirer.prompt([
                     {
                         type: 'list',
-                        name: 'department',
+                        name: 'role',
                         message: 'What is the role of the Employee?',
                         choices: roleTitleArray
                     }
                 ])
                 .then((answer2) => {
                     console.log(answer2);
+                    const params = [answer.firstName, answer.lastName, answer2.role]
+                    console.log (params);
+                    const manSql = `SELECT CONCAT (employees.first_name, ' ', employees.last_name) AS employee 
+                                   
+                                    FROM employees
+                                    
+                                    
+                                    `;
+                    connection.query(manSql, (err, result) => {
+                        if (err) throw err;
+                        const managerArray = result;
+                        console.log(managerArray);
+                    })
                 })
             })
         })
