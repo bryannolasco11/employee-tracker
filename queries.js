@@ -51,10 +51,10 @@ const viewEmployees = () => {
     const sql = `SELECT employees.id,
                         employees.first_name,
                         employees.last_name,
+                        CONCAT (employees.first_name, ' ', employees.last_name) AS employee,
                         roles.title,
                         department.dept_name AS department,
                         roles.salary,
-                        CONCAT (employees.first_name, ' ', employees.last_name) AS employee,
                         CONCAT (manager.first_name, ' ', manager.last_name) AS manager
                  FROM employees
                         LEFT JOIN roles ON employees.role_id = roles.id
@@ -171,7 +171,7 @@ const addRole = () => {
                 // console.log(map1);
                 // expected output: Array [2, 8, 18, 32]
                 //map((element, index) => { /* … */ })
-                //const deptsForInquiry = result.map(({dept_name, id}) => ({department: dept_name, id: id}));
+                
 
 
                 //console.log(deptsForInquiry);
@@ -185,6 +185,7 @@ const addRole = () => {
                     }
                 ])
                     .then((answer2) => {
+                        console.log(answer2);
                         const sql = `INSERT INTO roles (title, department_id, salary)
                                 values
                                     (?,?,?)`;
@@ -233,24 +234,61 @@ const addEmployee = () => {
             }
         }
     ])
+        // I am getting the roles for displaying 
         .then(answer => {
             const params = [answer.firstName, answer.lastName]
+            const roleSql = `SELECT roles.id AS value, roles.title AS name from roles`;
+            connection.query(roleSql, (err, result) => {
+                if (err) throw err;
+                const roleTitleArray = result;
+                console.log(roleTitleArray);
+
+                inquirer.prompt([
+                    {
+                        type: 'list',
+                        name: 'department',
+                        message: 'What is the role of the Employee?',
+                        choices: roleTitleArray
+                    }
+                ])
+                .then((answer2) => {
+                    console.log(answer2);
+                })
+            })
         })
 
-    // need to map the roles from roles table
+    
 };
 
 updateRole = () => {
-    const empSql = `SELECT * FROM employees`;
+    const empSql = `SELECT 
+                            employees.id AS value,
+                            CONCAT (employees.first_name, ' ', employees.last_name) AS name
+                            FROM employees
+
+    `;
     connection.query(empSql, (err, result) => {
         if (err) throw err;
-        const deptNameArray = result;
-        console.log(deptNameArray);
+        const employeeArray = result;
+        console.log(employeeArray);
     // inquirer to ask which employee want
     // display the roles
     // update the role
+    inquirer.prompt([
+        {
+            type: 'list',
+            name: 'department',
+            message: "Which employee's role do you wish to update?",
+            choices: employeeArray
+        }
+    ])
+    // We need to insert
+        .then((answer2) => {
+            console.log(answer2);
+            const empRoleSql = `UPDATE employees SET roles `
     })
 }
+    )}
     
 
 module.exports = {
