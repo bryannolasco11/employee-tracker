@@ -354,6 +354,69 @@ updateRole = () => {
     )
 };
 
+updateManager = () => {
+    const empSql = `SELECT 
+                            employees.id AS value,
+                            CONCAT (employees.first_name, ' ', employees.last_name) AS name
+                            FROM employees`;
+    connection.query(empSql, (err, result) => {
+        if (err) throw err;
+        const employeeArray = result;
+        console.log(employeeArray);
+        // inquirer to ask which employee want
+        // display the roles
+        // update the role
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'employee',
+                message: "Which manager of the employeee do you wish to update?",
+                choices: employeeArray
+            }
+        ])
+            // We need to insert
+            .then((answer) => {
+                console.log(answer);
+                // https://www.w3schools.com/mysql/mysql_update.asp
+                // the update MYSQL command would be UPDATE employee SET role_id WHERE id 
+                // so I need employees.role_id and employees.id
+                // I already have employees.id so I need employees role id
+                const empManSql = `SELECT 
+                                        employees.id AS value,
+                                        CONCAT (employees.first_name, ' ', employees.last_name) AS name
+                                        FROM employees`;;
+                connection.query(empManSql, (err, result) => {
+                    if (err) throw err;
+                    const diffManArray = result;
+                    console.log(diffManArray);
+
+                    inquirer.prompt([
+                        {
+                            type: 'list',
+                            name: 'manager',
+                            message: 'Who will be the new manager?',
+                            choices: diffManArray
+                        }
+                    ])
+                        .then((answer2) => {
+                            console.log(answer2);
+
+                            const diffRoleSql = `UPDATE employees SET manager_id = ? WHERE id =?`
+                            const params = [answer2.manager, answer.employee]
+                            console.log(params);
+                            connection.query(diffRoleSql, params, (err, results) => {
+                                if (err) throw err;
+                                const table = cTable.getTable(results);
+                                viewEmployees();
+                            })
+                        })
+                })
+
+            })
+    }
+    )
+};
+
 deleteEmployee = () => {
     console.log('This is deleteEmployee');
     const employeeSql = `SELECT employees.id as value,
@@ -415,7 +478,68 @@ deleteDepartment = () => {
     })
 };
 
+deleteRole = () => {
+    const roleSql = `SELECT roles.id as value, roles.title AS name FROM roles`;
+    connection.query(roleSql, (err, result) => {
+        if (err) throw err;
+        const roleArray = result;
+        console.log(result);
 
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'delete',
+                message: 'Which department would you like to delete?',
+                choices: roleArray
+            }
+        ])
+           .then(answer => {
+               const sql = `DELETE FROM roles WHERE id = ?`
+               const params = answer.delete;
+               console.log(params);
+               connection.query(sql, params, (err, results) => {
+                   if (err) throw err;
+                   const table = cTable.getTable(result);
+                   console.log(table);
+                    viewRoles();
+               })
+           })
+    })
+};
+
+viewBudget = () => {
+    //ask for dept first
+    // get dept_id in roles
+    // select id from roles when dept id = ?
+    // select all the employees with those role_id
+    // add them together to get total budget
+    const deptSql = `SELECT department.id AS value, department.dept_name AS name FROM department`;
+    connection.query(deptSql, (err, result) => {
+        if (err) throw err;
+        const departArray = result;
+        //console.log(departArray);
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'department',
+                message: 'Which department budget would you like to view?',
+                choices: departArray
+            }
+        ])
+        // we have to get the roles.salary of each role_id = department_id =? and sum that up
+        .then(answer => {
+            const sql = `SELECT SUM(roles.salary) as salary from roles LEFT JOIN employees ON roles.id=employees.role_id WHERE department_id = ?`
+            const params = answer.department;
+            console.log(params);
+            connection.query(sql, params, (err, result) => {
+                if(err) throw err;
+                const sumSalary = result;
+                console.log(sumSalary);
+                console.log(`The budget for the ${answer.department} department is ${result.salary}`);
+            })
+        })
+    })
+}
 
 module.exports = {
     viewDept,
@@ -426,5 +550,8 @@ module.exports = {
     addEmployee,
     updateRole,
     deleteEmployee,
-    deleteDepartment
+    deleteDepartment,
+    deleteRole,
+    updateManager,
+    viewBudget
 }
