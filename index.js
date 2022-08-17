@@ -9,7 +9,7 @@
 // dependencies
 const inquirer = require('inquirer');
 const db = require('./db/connection');
-const { viewDept, viewRoles, addDept, addRole, viewEmployees, addEmployee, updateRole } = require('./queries');
+const { viewDept, viewRoles, addDept, addRole, viewEmployees, addEmployee, updateRole, deleteEmployee } = require('./queries');
 
 promptUser = () => {
     inquirer.prompt([
@@ -17,7 +17,7 @@ promptUser = () => {
             type: 'list',
             name: 'selection',
             message: 'Please choose from the following options:',
-            choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role', 'None']
+            choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role', 'Delete an employee', 'None']
         }
     ])
     .then((answer)=>{
@@ -45,6 +45,9 @@ promptUser = () => {
             case 'Update an employee role':
                 updateRole();
                 break;  
+            case 'Delete an employee':
+                deleteEmployee();
+                break;
             case 'None':
                 console.log('Have a nice day!')
                 process.exit();

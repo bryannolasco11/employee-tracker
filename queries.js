@@ -46,11 +46,12 @@ const viewRoles = () => {
 // from employees get first name, last name, salaries
 // manager?
 // https://www.w3schools.com/sql/func_mysql_concat.asp
-
+//employees.first_name, 
+//employees.last_name,
 const viewEmployees = () => {
     const sql = `SELECT employees.id,
-                        employees.first_name,
-                        employees.last_name,
+                        
+                       
                         CONCAT (employees.first_name, ' ', employees.last_name) AS employee,
                         roles.title,
                         department.dept_name AS department,
@@ -353,6 +354,17 @@ updateRole = () => {
     )
 };
 
+deleteEmployee = () => {
+    console.log('This is deleteEmployee');
+    const employeeSql = `SELECT employees.id,
+                CONCAT (employees.first_name, ' ', employees.last_name) 
+                AS name FROM employees`;
+        connection.query(employeeSql, (err, result) => {
+            if (err) throw err;
+            const empName = result;
+            console.log(result);
+        }
+)}
 
 module.exports = {
     viewDept,
@@ -361,5 +373,6 @@ module.exports = {
     addRole,
     viewEmployees,
     addEmployee,
-    updateRole
+    updateRole,
+    deleteEmployee
 }
