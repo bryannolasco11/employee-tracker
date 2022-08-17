@@ -383,10 +383,38 @@ deleteEmployee = () => {
                     viewEmployees();
                })
            })
-                
-            
     })
-}
+};
+
+deleteDepartment = () => {
+    const deptSql = `SELECT department.id as value, department.dept_name AS name FROM department`;
+    connection.query(deptSql, (err, result) => {
+        if (err) throw err;
+        const deptName = result;
+        console.log(result);
+
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'delete',
+                message: 'Which department would you like to delete?',
+                choices: deptName
+            }
+        ])
+           .then(answer => {
+               const sql = `DELETE FROM department WHERE id = ?`
+               const params = answer.delete;
+               console.log(params);
+               connection.query(sql, params, (err, results) => {
+                   if (err) throw err;
+                   const table = cTable.getTable(result);
+                   console.log(table);
+                    viewDept();
+               })
+           })
+    })
+};
+
 
 
 module.exports = {
@@ -397,5 +425,6 @@ module.exports = {
     viewEmployees,
     addEmployee,
     updateRole,
-    deleteEmployee
+    deleteEmployee,
+    deleteDepartment
 }
