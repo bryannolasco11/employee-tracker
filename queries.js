@@ -528,14 +528,15 @@ viewBudget = () => {
         ])
         // we have to get the roles.salary of each role_id = department_id =? and sum that up
         .then(answer => {
-            const sql = `SELECT SUM(roles.salary) as salary from roles LEFT JOIN employees ON roles.id=employees.role_id WHERE department_id = ?`
+            const sql = `SELECT SUM(roles.salary) as department_budget from roles LEFT JOIN employees ON roles.id=employees.role_id WHERE department_id = ?`
             const params = answer.department;
             console.log(params);
             connection.query(sql, params, (err, result) => {
                 if(err) throw err;
-                const sumSalary = result;
-                console.log(sumSalary);
-                console.log(`The budget for the ${answer.department} department is ${result.salary}`);
+                const table = cTable.getTable(result);
+                console.log(table);
+                //console.log(`The budget for the ${answer.department} department is ${result.salary}`);
+                promptUser();
             })
         })
     })
