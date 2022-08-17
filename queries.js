@@ -164,7 +164,7 @@ const addRole = () => {
 
                 //console.log(result); result is in an array
                 const deptNameArray = result;
-                console.log(deptNameArray);
+                //console.log(deptNameArray);
                 //const array1 = [1, 4, 9, 16];
                 //[{ name: "a", value: 1 }]
                 // pass a function to map
@@ -242,7 +242,7 @@ const addEmployee = () => {
             connection.query(roleSql, (err, result) => {
                 if (err) throw err;
                 const roleTitleArray = result;
-                console.log(roleTitleArray);
+                //console.log(roleTitleArray);
 
                 inquirer.prompt([
                     {
@@ -282,7 +282,7 @@ const addEmployee = () => {
                                     connection.query(sql, params, (err, results) => {
                                         if (err) throw err;
                                         const table = cTable.getTable(results);
-                                        console.log(table);
+                                        //console.log(table);
                                         viewEmployees();
                                     })
                                 })
@@ -302,7 +302,7 @@ updateRole = () => {
     connection.query(empSql, (err, result) => {
         if (err) throw err;
         const employeeArray = result;
-        console.log(employeeArray);
+        //console.log(employeeArray);
         // inquirer to ask which employee want
         // display the roles
         // update the role
@@ -325,7 +325,7 @@ updateRole = () => {
                 connection.query(empRoleSql, (err, result) => {
                     if (err) throw err;
                     const diffRoleArray = result;
-                    console.log(diffRoleArray);
+                    //console.log(diffRoleArray);
 
                     inquirer.prompt([
                         {
@@ -336,7 +336,7 @@ updateRole = () => {
                         }
                     ])
                         .then((answer2) => {
-                            console.log(answer2);
+                            //console.log(answer2);
 
                             const diffRoleSql = `UPDATE employees SET role_id = ? WHERE id =?`
                             const params = [answer2.role, answer.employee]
@@ -362,7 +362,7 @@ updateManager = () => {
     connection.query(empSql, (err, result) => {
         if (err) throw err;
         const employeeArray = result;
-        console.log(employeeArray);
+        //console.log(employeeArray);
         // inquirer to ask which employee want
         // display the roles
         // update the role
@@ -376,7 +376,7 @@ updateManager = () => {
         ])
             // We need to insert
             .then((answer) => {
-                console.log(answer);
+                //console.log(answer);
                 // https://www.w3schools.com/mysql/mysql_update.asp
                 // the update MYSQL command would be UPDATE employee SET role_id WHERE id 
                 // so I need employees.role_id and employees.id
@@ -425,7 +425,7 @@ deleteEmployee = () => {
     connection.query(employeeSql, (err, result) => {
         if (err) throw err;
         const empName = result;
-        console.log(result);
+        //console.log(result);
 
         inquirer.prompt([
             {
@@ -442,7 +442,7 @@ deleteEmployee = () => {
                connection.query(sql, params, (err, results) => {
                    if (err) throw err;
                    const table = cTable.getTable(result);
-                   console.log(table);
+                   //console.log(table);
                     viewEmployees();
                })
            })
@@ -454,7 +454,7 @@ deleteDepartment = () => {
     connection.query(deptSql, (err, result) => {
         if (err) throw err;
         const deptName = result;
-        console.log(result);
+        //console.log(result);
 
         inquirer.prompt([
             {
@@ -471,7 +471,7 @@ deleteDepartment = () => {
                connection.query(sql, params, (err, results) => {
                    if (err) throw err;
                    const table = cTable.getTable(result);
-                   console.log(table);
+                   //console.log(table);
                     viewDept();
                })
            })
@@ -483,7 +483,7 @@ deleteRole = () => {
     connection.query(roleSql, (err, result) => {
         if (err) throw err;
         const roleArray = result;
-        console.log(result);
+        //console.log(result);
 
         inquirer.prompt([
             {
@@ -500,7 +500,7 @@ deleteRole = () => {
                connection.query(sql, params, (err, results) => {
                    if (err) throw err;
                    const table = cTable.getTable(result);
-                   console.log(table);
+                   //console.log(table);
                     viewRoles();
                })
            })
@@ -528,7 +528,13 @@ viewBudget = () => {
         ])
         // we have to get the roles.salary of each role_id = department_id =? and sum that up
         .then(answer => {
-            const sql = `SELECT SUM(roles.salary) as department_budget from roles LEFT JOIN employees ON roles.id=employees.role_id WHERE department_id = ?`
+            const sql = `SELECT 
+                            SUM(roles.salary) AS department_budget 
+                        FROM 
+                            roles LEFT JOIN employees 
+                            ON roles.id=employees.role_id 
+                        WHERE 
+                            department_id = ?`
             const params = answer.department;
             console.log(params);
             connection.query(sql, params, (err, result) => {

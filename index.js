@@ -11,13 +11,38 @@ const inquirer = require('inquirer');
 const db = require('./db/connection');
 const { viewDept, viewRoles, addDept, addRole, viewEmployees, addEmployee, updateRole, deleteEmployee, deleteDepartment, deleteRole, updateManager, viewBudget } = require('./queries');
 
+
+    console.log('**************************************************************************************');
+    console.log('**************************************************************************************');
+    console.log('***                                                                                ***');
+    console.log('***                                                                                ***');
+    console.log('***   FOR THE THOUSANDS IN ATTENDANCE AND THE MILLIONS WATCHING AROUND THE WORLD   ***');
+    console.log('***                                                                                ***');
+    console.log('***                                                                                ***');
+    console.log('***                                                                                ***');
+    console.log('***                                                                                ***');
+    console.log('***                                                                                ***');
+    console.log('***                                                                                ***');
+    console.log("***           LET'S GET READY TO RUMBLE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!            ***");
+    console.log('***                                                                                ***');
+    console.log('***                                                                                ***');
+    console.log('***                                                                                ***');
+    console.log('***                                                                                ***');
+    console.log('***                                                                                ***');
+    console.log('***                                                                                ***');
+    console.log('***                        Welcome to  the Employee Tracker!                       ***');
+    console.log('***                                                                                ***');
+    console.log('***                                                                                ***');
+    console.log('**************************************************************************************');
+    console.log('**************************************************************************************');
+
 promptUser = () => {
     inquirer.prompt([
         {
             type: 'list',
             name: 'selection',
             message: 'Please choose from the following options:',
-            choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role', 'Delete an employee', 'Delete a department', 'Delete a role', 'Update an employee manager', 'View department budget', 'None']
+            choices: ['View all departments',  'View department budget',  'Add a department', 'Delete a department', 'View all employees', 'Add an employee', 'Update an employee manager',  'Delete an employee', 'View all roles', 'Add a role', 'Update an employee role',  'Delete a role', 'None']
         }
     ])
     .then((answer)=>{
