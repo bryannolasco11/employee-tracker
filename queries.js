@@ -356,15 +356,38 @@ updateRole = () => {
 
 deleteEmployee = () => {
     console.log('This is deleteEmployee');
-    const employeeSql = `SELECT employees.id,
+    const employeeSql = `SELECT employees.id as value,
                 CONCAT (employees.first_name, ' ', employees.last_name) 
                 AS name FROM employees`;
-        connection.query(employeeSql, (err, result) => {
-            if (err) throw err;
-            const empName = result;
-            console.log(result);
-        }
-)}
+    connection.query(employeeSql, (err, result) => {
+        if (err) throw err;
+        const empName = result;
+        console.log(result);
+
+        inquirer.prompt([
+            {
+                type: 'list',
+                name: 'delete',
+                message: 'Which employee would you like to delete?',
+                choices: empName
+            }
+        ])
+           .then(answer => {
+               const sql = `DELETE FROM employees WHERE id = ?`
+               const params = answer.delete;
+               console.log(params);
+               connection.query(sql, params, (err, results) => {
+                   if (err) throw err;
+                   const table = cTable.getTable(result);
+                   console.log(table);
+                    viewEmployees();
+               })
+           })
+                
+            
+    })
+}
+
 
 module.exports = {
     viewDept,
