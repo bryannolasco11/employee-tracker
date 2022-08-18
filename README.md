@@ -1,6 +1,12 @@
 # employee-tracker
 https://github.com/bryannolasco11/employee-tracker
 
+### Google video link
+https://drive.google.com/file/d/1FLoCV1VKkW62AbE40RwimKoCt8rKZBdz/view
+
+### Youtube link
+https://youtu.be/jENjyVRw5HA
+
 ![alt.text](./images/Employee-Tracker.png)
 
 ## Table of Contents:

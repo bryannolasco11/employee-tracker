@@ -388,7 +388,7 @@ updateManager = () => {
                 connection.query(empManSql, (err, result) => {
                     if (err) throw err;
                     const diffManArray = result;
-                    console.log(diffManArray);
+                    //console.log(diffManArray);
 
                     inquirer.prompt([
                         {
