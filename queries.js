@@ -3,7 +3,7 @@ const connection = require('./db/connection');
 const mysql = require('mysql2');
 const index = require('./index');
 const inquirer = require('inquirer');
-const Department = require('./lib/department.js');
+
 
 // From MYSQL2 docs: MySQL provides execute helper which will prepare and query the statement. 
 const viewDept = () => {
